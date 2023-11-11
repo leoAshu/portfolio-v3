@@ -1,7 +1,7 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+
 const App = () => {
-  return (
-    <div className="text-3xl underline">App</div>
-  )
+    return <main className="bg-slate-300/20">App</main>
 }
 
 export default App
