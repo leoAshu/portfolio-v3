@@ -64,6 +64,7 @@ const Home = () => {
                         position={islandPosition}
                         scale={isLandScale}
                         rotation={islandRotation}
+                        isRotating={isRotating}
                         setIsRotating={setIsRotating}
                     />
                     <Plane
