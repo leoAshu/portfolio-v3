@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Loader } from '../components'
 import Island from '../models/Island'
@@ -7,6 +7,8 @@ import Bird from '../models/Bird'
 import Plane from '../models/Plane'
 
 const Home = () => {
+    const [isRotating, setIsRotating] = useState(false)
+
     const adjustIslandForScreenSize = () => {
         let screenScale = null
         let screenPosition = [0, -6.5, -43]
@@ -21,16 +23,31 @@ const Home = () => {
         return [screenScale, screenPosition, rotation]
     }
 
+    const adjustPlaneForScreenSize = () => {
+        let screenScale = null
+        let screenPosition = null
+
+        if (window.innerWidth < 768) {
+            screenScale = [1.5, 1.5, 1.5]
+            screenPosition = [0, -1.5, 0]
+        } else {
+            screenScale = [3, 3, 3]
+            screenPosition = [0, -4, -4]
+        }
+
+        return [screenScale, screenPosition]
+    }
+
     const [isLandScale, islandPosition, islandRotation] =
         adjustIslandForScreenSize()
+    const [planeScale, planePosition] = adjustPlaneForScreenSize()
 
     return (
         <section className="w-full h-screen relative">
-            {/* <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
-                POPUP
-            </div> */}
             <Canvas
-                className="w-full h-screen bg-transparent"
+                className={`w-full h-screen bg-transparent ${
+                    isRotating ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
                 camera={{ near: 0.1, far: 1000 }}
             >
                 <Suspense fallback={<Loader />}>
@@ -42,13 +59,19 @@ const Home = () => {
                         intensity={1}
                     />
                     <Sky />
+                    <Bird />
                     <Island
                         position={islandPosition}
                         scale={isLandScale}
                         rotation={islandRotation}
+                        setIsRotating={setIsRotating}
                     />
-                    <Bird />
-                    <Plane />
+                    <Plane
+                        isRotating={isRotating}
+                        planeScale={planeScale}
+                        planePosition={planePosition}
+                        rotation={[0, 20, 0]}
+                    />
                 </Suspense>
             </Canvas>
         </section>
