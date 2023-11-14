@@ -1,5 +1,9 @@
-import { useRef, useState } from 'react'
+import { Suspense, useRef, useState } from 'react'
+import { Canvas } from '@react-three/fiber'
 import emailjs from '@emailjs/browser'
+
+import Fox from '../models/Fox'
+import { Loader } from '../components'
 
 const Contact = () => {
     const formRef = useRef(null)
@@ -9,6 +13,7 @@ const Contact = () => {
         email: '',
         message: '',
     })
+    const [currentAnimation, setCurrentAnimation] = useState('idle')
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -17,6 +22,7 @@ const Contact = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         setIsLoading(true)
+        setCurrentAnimation('hit')
 
         emailjs
             .send(
@@ -33,17 +39,20 @@ const Contact = () => {
             )
             .then(() => {
                 setIsLoading(false)
-
-                setForm({ name: '', email: '', message: '' })
+                setTimeout(() => {
+                    setCurrentAnimation('idle')
+                    setForm({ name: '', email: '', message: '' })
+                }, [3000])
             })
             .catch((error) => {
                 setIsLoading(false)
+                setCurrentAnimation('idle')
                 console.error(error)
             })
     }
 
-    const handleFocus = () => {}
-    const handleBlur = () => {}
+    const handleFocus = () => setCurrentAnimation('walk')
+    const handleBlur = () => setCurrentAnimation('idle')
 
     return (
         <section className="relative flex lg:flex-row flex-col max-container">
@@ -52,6 +61,7 @@ const Contact = () => {
 
                 <form
                     ref={formRef}
+                    onSubmit={handleSubmit}
                     className="w-full flex flex-col gap-7 mt-14"
                 >
                     <label className="text-black-500 font-semibold">
@@ -109,6 +119,28 @@ const Contact = () => {
                         {isLoading ? 'Sending...' : 'Send Message'}
                     </button>
                 </form>
+            </div>
+
+            <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
+                <Canvas
+                    camera={{
+                        position: [0, 0, 5],
+                        fov: 75,
+                        near: 0.1,
+                        far: 1000,
+                    }}
+                >
+                    <directionalLight intensity={2.5} position={[0, 0, 1]} />
+                    <ambientLight intensity={0.5} />
+                    <Suspense fallback={<Loader />}>
+                        <Fox
+                            currentAnimation={currentAnimation}
+                            position={[0.5, 0.25, 0]}
+                            rotation={[12.6, -0.6, 0]}
+                            scale={[0.5, 0.5, 0.5]}
+                        />
+                    </Suspense>
+                </Canvas>
             </div>
         </section>
     )
