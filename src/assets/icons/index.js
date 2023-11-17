@@ -15,6 +15,7 @@ import linkedin from './linkedin.svg'
 import twitter from './twitter.svg'
 import summiz from './summiz.svg'
 import dalle from './dalle.svg'
+import ziplink from './ziplink.svg'
 import arrow from './arrow.svg'
 import contact from './contact.svg'
 import soundon from './soundon.png'
@@ -44,6 +45,7 @@ export {
     twitter,
     summiz,
     dalle,
+    ziplink,
     arrow,
     contact,
     soundon,

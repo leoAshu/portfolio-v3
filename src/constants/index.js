@@ -15,6 +15,7 @@ import {
     sass,
     summiz,
     dalle,
+    ziplink,
     tailwindcss,
     typescript,
     android,
@@ -172,6 +173,15 @@ export const socialLinks = [
 ]
 
 export const projects = [
+    {
+        iconUrl: ziplink,
+        theme: 'btn-back-blue',
+        name: 'ZipLink',
+        description:
+            'ZipLink is a MERN stack solution for efficient sharing, turning extensive URLs into streamlined links with ease, eliminating cumbersome web addresses for effortless communication and making every link sharing experience a breeze. Simplify, Share, ZipLink!',
+        link: 'https://github.com/leoAshu/zip-link',
+        demo: 'https://zip-link-six.vercel.app/',
+    },
     {
         iconUrl: dalle,
         theme: 'btn-back-black',
